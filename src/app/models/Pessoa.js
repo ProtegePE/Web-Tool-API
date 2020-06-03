@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const { Model } = require('sequelize');
 
-class Area extends Model {
+class Pessoa extends Model {
     static init(sequelize) {
         super.init(
             {
@@ -13,10 +13,18 @@ class Area extends Model {
             },
             {
                 sequelize,
+                tableName: 'pessoa',
             }
         );
         return this;
     }
+
+    static associate (models) {
+        this.hasMany(models.Endereco, {
+            foreignKey: 'pessoa_id', 
+            as: 'enderecos'
+        })
+    };
 }
 
-module.exports = Area;
+module.exports = Pessoa;

@@ -2,9 +2,10 @@ const Sequelize = require('sequelize');
 const databaseConfig = require('../config/database');
 
 const Pessoa = require('../app/models/Pessoa');
+const Endereco = require('../app/models/Endereco');
 
 // Variável para receber todos os models
-const models = [Pessoa];
+const models = [Pessoa, Endereco];
 
 class Database {
     constructor() {

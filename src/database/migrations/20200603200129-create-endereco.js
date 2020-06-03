@@ -4,33 +4,48 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";')
       .then(() => {
-        return queryInterface.createTable('pessoa', { 
+        return queryInterface.createTable('endereco', { 
           id: {
             allowNull: false,
             primaryKey: true,
             type: Sequelize.DataTypes.UUID,
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
-          nome: {
+          logradouro: {
             type: Sequelize.STRING,
             allowNull: false,
           },
-          cpf: {
+          complemento: {
             type: Sequelize.STRING,
             allowNull: false,
           },
-          rg: {
+          numero: {
             type: Sequelize.STRING,
             allowNull: false,
           },
-          telefone: {
+          bairro: {
             type: Sequelize.STRING,
             allowNull: false,
           },
-          cns: {
+          cidade: {
             type: Sequelize.STRING,
             allowNull: false,
-          },          
+          },
+          uf: {
+            type: Sequelize.STRING,
+            allowNull: false,
+          },
+          cep: {
+            type: Sequelize.STRING,
+            allowNull: false,
+          },
+          pessoa_id: {
+            type: Sequelize.DataTypes.UUID,
+            references: { model: 'pessoa', key: 'id' },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE',
+            allowNull: false,
+          },        
           created_at: {
             type: Sequelize.DATE,
             allowNull: false,
@@ -44,6 +59,6 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-      return queryInterface.dropTable('pessoa');
+      return queryInterface.dropTable('endereco');
   }
 };
