@@ -58,12 +58,14 @@ class PessoaController {
           association: 'enderecos',
       },
       where: {
-        nome: {
-          [Op.iLike]: '%' + busca + '%'
-        },
-        cpf: {
-          [Op.iLike]: '%' + busca + '%'
-        }
+        [Op.or]: [
+          {
+            nome: {[Op.iLike]: '%' + busca + '%'},
+          },
+          {
+            cpf: {[Op.iLike]: '%' + busca + '%'}
+          }
+        ] 
       }
     })
 
