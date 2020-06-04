@@ -3,9 +3,10 @@ const databaseConfig = require('../config/database');
 
 const Pessoa = require('../app/models/Pessoa');
 const Endereco = require('../app/models/Endereco');
+const Exame = require('../app/models/Exame');
 
 // Variável para receber todos os models
-const models = [Pessoa, Endereco];
+const models = [Pessoa, Endereco, Exame];
 
 class Database {
     constructor() {

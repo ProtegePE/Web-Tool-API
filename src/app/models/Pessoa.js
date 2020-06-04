@@ -24,6 +24,11 @@ class Pessoa extends Model {
             foreignKey: 'pessoa_id', 
             as: 'enderecos'
         })
+
+        this.hasMany(models.Exame, {
+            foreignKey: 'pessoa_id', 
+            as: 'exames'
+        })
     };
 }
 

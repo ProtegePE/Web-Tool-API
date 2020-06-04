@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "heroku-prebuild": "yarn && yarn sequelize db:migrate"
   },
   "dependencies": {
     "celebrate": "^12.1.1",
