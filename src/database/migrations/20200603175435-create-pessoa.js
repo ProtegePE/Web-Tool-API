@@ -12,7 +12,7 @@ module.exports = {
             defaultValue: Sequelize.literal('uuid_generate_v4()'),
           },
           nome: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(100),
             allowNull: false,
           },
           cpf: {
