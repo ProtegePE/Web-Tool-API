@@ -2,6 +2,7 @@ const { Router } = require('express');
 const { celebrate, Segments, Joi } = require('celebrate');
 
 const PessoaController = require('./app/controllers/PessoaController');
+const ExameController = require('./app/controllers/ExameController');
 
 const routes = new Router();
 
@@ -16,4 +17,7 @@ routes.get('/pessoa/id', PessoaController.show);
 routes.put('/pessoa/id', PessoaController.update);
 routes.delete('/pessoa/id', PessoaController.delete);
 
- module.exports = routes;
+routes.get('/exames', ExameController.index);
+routes.post('/exames', ExameController.store);
+
+module.exports = routes;

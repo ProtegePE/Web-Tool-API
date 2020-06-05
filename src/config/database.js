@@ -3,7 +3,7 @@ require('dotenv').config({
 });
 
 module.exports = {
-    use_env_variable: "DATABASE_URL",
+    //use_env_variable: "DATABASE_URL",
     dialect: process.env.DB_DIALECT || 'postgres',
     host: process.env.DB_HOST,
     port: process.env.DB_PORT || '5432',

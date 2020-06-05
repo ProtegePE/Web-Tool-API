@@ -20,6 +20,16 @@ class Exame extends Model {
             foreignKey: 'pessoa_id', 
             as: 'pessoa'
         })
+
+        this.hasMany(models.Rtpcr, {
+            foreignKey: 'exame_id', 
+            as: 'exames_rtpcr'
+        })
+
+        this.hasMany(models.Sorologico, {
+            foreignKey: 'exame_id', 
+            as: 'exames_sorologico'
+        })
     };
 }
 
