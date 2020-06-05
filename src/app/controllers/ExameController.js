@@ -122,6 +122,19 @@ class ExameController {
             }
         });
     }
+
+    async delete(req, res) {
+        const exameId = req.headers.exame_id;
+        const exame = await Exame.findByPk(exameId);
+        
+        if (!exame) {
+          return res.status(404).json({ error: 'Exame not found' });
+        }
+    
+        await exame.destroy();
+    
+        return res.status(204).send();
+    }
 }
 
 module.exports = new ExameController();

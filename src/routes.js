@@ -19,5 +19,6 @@ routes.delete('/pessoa/id', PessoaController.delete);
 
 routes.get('/exames', ExameController.index);
 routes.post('/exames', ExameController.store);
+routes.delete('/exames/id', ExameController.delete);
 
 module.exports = routes;
