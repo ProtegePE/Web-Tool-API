@@ -14,7 +14,7 @@ class ExameController {
             attributes: [ 'id', 'resultado' ],
             include: { 
                 model: Sorologico,
-                attributes: [ 'igm', 'igg' ],
+                attributes: [ 'id', 'igm', 'igg' ],
                 association: 'exames_sorologico',
                 limit: 20,
                 offset: (page - 1) * 20,
@@ -41,7 +41,7 @@ class ExameController {
             attributes: [ 'id', 'resultado' ],
             include: { 
                 model: Rtpcr,
-                attributes: [ 'valor' ],
+                attributes: [ 'id', 'valor' ],
                 association: 'exames_rtpcr',
                 limit: 20,
                 offset: (page - 1) * 20,
@@ -75,7 +75,7 @@ class ExameController {
             attributes: [ 'id', 'resultado' ],
             include: { 
                 model: Sorologico,
-                attributes: [ 'igm', 'igg' ],
+                attributes: [ 'id' , 'igm', 'igg' ],
                 association: 'exames_sorologico',
             },
         });
@@ -84,7 +84,7 @@ class ExameController {
             attributes: [ 'id', 'resultado' ],
             include: { 
                 model: Rtpcr,
-                attributes: [ 'valor' ],
+                attributes: [ 'id', 'valor' ],
                 association: 'exames_rtpcr',
             },
         });
@@ -116,7 +116,7 @@ class ExameController {
             attributes: [ 'id', 'resultado' ],
             include: { 
                 model: Sorologico,
-                attributes: [ 'igm', 'igg' ],
+                attributes: [ 'id', 'igm', 'igg' ],
                 association: 'exames_sorologico',
             },
             where: {
@@ -143,7 +143,7 @@ class ExameController {
             attributes: [ 'id', 'resultado' ],
             include: { 
                 model: Rtpcr,
-                attributes: [ 'valor' ],
+                attributes: [ 'id', 'valor' ],
                 association: 'exames_rtpcr',
             },            
             where: {
@@ -225,6 +225,79 @@ class ExameController {
             rtpcr: {
                 id: rtpcrX.id,
                 valor: exame.valor
+            }
+        });
+    }
+
+    async update (req, res) {
+        const exameId = req.headers.exame_id;
+        const pessoaId = req.headers.pessoa_id;
+        const sorologicoId = req.headers.sorologico_id;
+        const rtpcrId = req.headers.rtpcr_id;
+
+        const exameX = await Exame.findByPk(exameId);
+        if(!exameX) {
+            return res.status(404).json({ message: 'Exame not found' });
+        }
+
+        const exame = {
+            id: exameX.id,
+            resultado: req.body.resultado,
+            valor: req.body.valor,
+            igm: req.body.igm,
+            igg: req.body.igg,
+            pessoa_id: pessoaId
+        }
+
+        await exameX.update(exame);
+        
+        if(!exame.valor || rtpcrId === ''){
+            const sorologico = {
+                id: sorologicoId,
+                igm: exame.igm,
+                igg: exame.igg,
+                exame_id: exame.id,
+            }
+
+            const sorologicoX = await Sorologico.findOne({
+                where: {
+                    id: sorologico.id
+                }
+            });
+
+            await sorologicoX.update(sorologico);
+
+            return res.json({
+                id: exame.id,
+                resultado: exame.resultado,
+                sorologico: {
+                    id: sorologicoX.id,
+                    igm: sorologico.igm,
+                    igg: sorologico.igg,   
+                }
+            });
+        }
+
+        const rtpcr = {
+            id: rtpcrId,
+            valor: exame.valor,
+            exame_id: exame.id,
+        }
+
+        const rtpcrX = await Rtpcr.findOne({
+            where: {
+                id: rtpcr.id
+            }
+        });
+
+        await rtpcrX.update(rtpcr);
+
+        return res.json({
+            id: exame.id,
+            resultado: exame.resultado,
+            rtpcr: {
+                id: rtpcrX.id,
+                valor: rtpcr.valor,
             }
         });
     }

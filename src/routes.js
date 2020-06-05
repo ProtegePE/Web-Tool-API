@@ -21,6 +21,7 @@ routes.post('/exame', ExameController.store);
 routes.get('/exames', ExameController.index);
 routes.get('/exames/customSearch', ExameController.showCustomSearch);
 routes.get('/exame/id', ExameController.show);
+routes.put('/exame/id', ExameController.update);
 routes.delete('/exames/id', ExameController.delete);
 
 module.exports = routes;
