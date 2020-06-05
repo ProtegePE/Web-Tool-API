@@ -109,7 +109,68 @@ class ExameController {
     }
 
     async showCustomSearch(req, res) {
-        return res.json({ok:true});
+        const { busca } = req.headers;
+        let exames = [];
+
+        const exameSorologico = await Exame.findAll({
+            attributes: [ 'id', 'resultado' ],
+            include: { 
+                model: Sorologico,
+                attributes: [ 'igm', 'igg' ],
+                association: 'exames_sorologico',
+            },
+            where: {
+                resultado: {[Op.iLike]: '%' + busca + '%'},
+            }
+        });
+        
+        if(!exameSorologico) {
+            return res.status(404).json({ message: 'Exame Sorologico not found' });
+        }
+
+        for(let i = 0; i < exameSorologico.length; i++) {
+            if(exameSorologico[i].dataValues.exames_sorologico.length >= 1)
+            {
+                exames.push({
+                    id: exameSorologico[i].dataValues.id,
+                    resultado: exameSorologico[i].dataValues.resultado,
+                    sorologico: exameSorologico[i].dataValues.exames_sorologico[0]
+                })
+            }
+        }
+        
+        const exameRtpcr = await Exame.findAll({
+            attributes: [ 'id', 'resultado' ],
+            include: { 
+                model: Rtpcr,
+                attributes: [ 'valor' ],
+                association: 'exames_rtpcr',
+            },            
+            where: {
+                [Op.or]: [
+                    {
+                        resultado: {[Op.iLike]: '%' + busca + '%'},
+                    }
+                ] 
+            }
+        });
+        
+        if(!exameRtpcr) {
+            return res.status(404).json({ message: 'Exame Rtpcr not found' });
+        }
+
+        for(let i = 0; i < exameRtpcr.length; i++) {
+            if(exameRtpcr[i].dataValues.exames_rtpcr.length >= 1)
+            {
+                exames.push({
+                    id: exameRtpcr[i].dataValues.id,
+                    resultado: exameRtpcr[i].dataValues.resultado,
+                    retpcr: exameRtpcr[i].dataValues.exames_rtpcr[0]
+                })
+            }
+        }
+        
+        return res.json(exames);
     }
 
     async store (req, res) {
