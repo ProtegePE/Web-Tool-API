@@ -17,8 +17,10 @@ routes.get('/pessoa/id', PessoaController.show);
 routes.put('/pessoa/id', PessoaController.update);
 routes.delete('/pessoa/id', PessoaController.delete);
 
+routes.post('/exame', ExameController.store);
 routes.get('/exames', ExameController.index);
-routes.post('/exames', ExameController.store);
+routes.get('/exames/customSearch', ExameController.showCustomSearch);
+routes.get('/exame/id', ExameController.show);
 routes.delete('/exames/id', ExameController.delete);
 
 module.exports = routes;

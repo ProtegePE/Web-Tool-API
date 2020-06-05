@@ -66,6 +66,51 @@ class ExameController {
         
         return res.json(exames);
     }
+    
+    async show(req, res) {
+        const exameId = req.headers.exame_id;
+        const exameObj = [];
+        
+        const exameSorologico = await Exame.findByPk(exameId, {
+            attributes: [ 'id', 'resultado' ],
+            include: { 
+                model: Sorologico,
+                attributes: [ 'igm', 'igg' ],
+                association: 'exames_sorologico',
+            },
+        });
+
+        const exameRtpcr = await Exame.findByPk(exameId, {
+            attributes: [ 'id', 'resultado' ],
+            include: { 
+                model: Rtpcr,
+                attributes: [ 'valor' ],
+                association: 'exames_rtpcr',
+            },
+        });
+
+        if(exameSorologico.dataValues.exames_sorologico.length >= 1) {
+            exameObj.push({
+                id: exameSorologico.dataValues.id,
+                resultado: exameSorologico.dataValues.resultado,
+                sorologico: exameSorologico.dataValues.exames_sorologico[0]
+            })
+
+            return res.json(exameObj[0]);
+        }
+
+        exameObj.push({
+            id: exameRtpcr.dataValues.id,
+            resultado: exameRtpcr.dataValues.resultado,
+            retpcr: exameRtpcr.dataValues.exames_rtpcr[0]
+        })
+
+        return res.json(exameObj[0]);
+    }
+
+    async showCustomSearch(req, res) {
+        return res.json({ok:true});
+    }
 
     async store (req, res) {
         const pessoaId = req.headers.pessoa_id;
